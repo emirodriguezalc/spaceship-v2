@@ -1,4 +1,5 @@
 #include <ncurses.h>
+#include "high_scores.h"
 
 void displayMenu(int selectedItem)
 {
@@ -24,5 +25,40 @@ int handleMenuInput(int selectedItem)
     // in case i press the number directly
   default:
     return selectedItem;
+  }
+}
+
+void menuLoop()
+{
+  int choice = 1;
+  bool show_menu = true;
+
+  while (show_menu)
+  {
+    displayMenu(choice);
+
+    int newChoice = handleMenuInput(choice);
+    if (newChoice != choice)
+    {
+      choice = newChoice;
+    }
+    else
+    {
+      switch (choice)
+      {
+      case 1:
+        // START NEW GAME
+        show_menu = false;
+        break;
+      case 2:
+        // SHOW HIGHEST SCORES
+        showHighScores(); // Call showHighScores() directly without using a separate flag variable
+        break;
+      case 3:
+        printw("Exiting the program.\n");
+        endwin();
+        return;
+      }
+    }
   }
 }
