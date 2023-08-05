@@ -8,7 +8,7 @@ int main()
     keypad(stdscr, TRUE);
     noecho();
 
-    menuLoop(); // Call the menu loop function
+    menuLoop();
 
     endwin(); // End ncurses window before exiting
     return 0;

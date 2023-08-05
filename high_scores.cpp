@@ -1,5 +1,5 @@
 #include <ncurses.h>
-#include <fstream> // Include the header for file stream operations
+#include <fstream>
 
 void showHighScores()
 {
@@ -7,7 +7,7 @@ void showHighScores()
 
     while (!back_to_menu)
     {
-        clear(); // Clear the console screen using ncurses
+        clear();
         std::ifstream inputFile("highest_scores.txt");
         if (!inputFile.is_open())
         {
@@ -18,10 +18,10 @@ void showHighScores()
         std::string scoreStr;
         while (std::getline(inputFile, scoreStr))
         {
-            printw("%s\n", scoreStr.c_str()); // Use printw to display the scores
+            printw("%s\n", scoreStr.c_str());
         }
 
-        inputFile.close(); // Close the file after reading
+        inputFile.close();
 
         printw("Press 'm' to go back to the menu.\n");
         refresh();
@@ -34,7 +34,7 @@ void showHighScores()
 
         if (ch == 'm' || ch == 'M')
         {
-            back_to_menu = true; // Go back to the menu
+            back_to_menu = true;
         }
     }
 }

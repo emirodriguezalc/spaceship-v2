@@ -32,14 +32,13 @@ int handleMenuInput(int selectedItem)
             break;
         case 2:
             // SHOW HIGHEST SCORES
-            showHighScores(); // Call showHighScores() directly without using a separate flag variable
+            showHighScores();
             break;
         case 3:
             printw("Exiting the program.\n");
             exit(0);
             return 1;
         }
-        // in case I press the number directly
     default:
         return selectedItem;
     }

@@ -1,11 +1,11 @@
 #include <ncurses.h>
-#include <fstream> // Include the header for file stream operations
+#include <fstream>
 
-WINDOW *gameWin = nullptr; // Declare the game window globally
+WINDOW *gameWin = nullptr; // Declare the game window globally TODO: REVISE THIS
 
 void setUpGameDimensions()
 {
-  clear(); // Clear the screen after exiting gameLoop()
+  clear();
   refresh();
 
   curs_set(0); // Hide the cursor
@@ -37,7 +37,6 @@ void gameLoop()
 {
   bool game_over = false;
 
-  // Move the setUpGameDimensions() call here, outside of the loop
   setUpGameDimensions();
 
   while (!game_over)
@@ -45,12 +44,12 @@ void gameLoop()
     // Clear the game window
     wclear(gameWin);
     int ch = getch();
-    if (ch == 'q')
+    if (ch == 'q') //Exit
     {
       game_over = true;
-      delwin(gameWin); // Delete the game window before exiting gameLoop()
-      clear();         // Clear the screen after exiting gameLoop()
-      refresh();       // Refresh the display using ncurses
+      delwin(gameWin);
+      clear();
+      refresh();
     }
   }
 
