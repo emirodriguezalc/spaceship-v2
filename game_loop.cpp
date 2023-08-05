@@ -1,5 +1,7 @@
 #include <ncurses.h>
 #include <fstream>
+#include <thread>
+#include "window_effects.h"
 
 WINDOW *gameWin = nullptr; // Declare the game window globally TODO: REVISE THIS
 
@@ -29,7 +31,6 @@ void setUpGameDimensions()
   }
 
   gameWin = newwin(height, width, startY, startX);
-  box(gameWin, 0, 0);
   wrefresh(gameWin);
 }
 
@@ -38,13 +39,14 @@ void gameLoop()
   bool game_over = false;
 
   setUpGameDimensions();
+  displayStars(gameWin, game_over);
 
   while (!game_over)
   {
     // Clear the game window
     wclear(gameWin);
     int ch = getch();
-    if (ch == 'q') //Exit
+    if (ch == 'q') // Exit
     {
       game_over = true;
       delwin(gameWin);
