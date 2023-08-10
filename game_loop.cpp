@@ -3,9 +3,7 @@
 #include <thread>
 #include "window_effects.h"
 
-WINDOW *gameWin = nullptr; // Declare the game window globally TODO: REVISE THIS
-
-void setUpGameDimensions()
+void setUpGameDimensions(WINDOW **gameWin) // Change the parameter to a pointer to the pointer
 {
   clear();
   refresh();
@@ -25,37 +23,43 @@ void setUpGameDimensions()
   int startX = (COLS - width) / 2;
 
   // Delete the previous gameWin if it exists
-  if (gameWin)
+  if (*gameWin) // Dereference the pointer to check if it's not nullptr
   {
-    delwin(gameWin);
+    delwin(*gameWin); // Dereference the pointer to delete the window
   }
 
-  gameWin = newwin(height, width, startY, startX);
-  wrefresh(gameWin);
+  *gameWin = newwin(height, width, startY, startX); // Dereference the pointer to set the window
+  wrefresh(*gameWin); // Dereference the pointer to refresh the window
 }
 
 void gameLoop()
 {
   bool game_over = false;
+  WINDOW *gameWin_displayStars = nullptr;
+  WINDOW *gameWin_spaceship = nullptr;
 
-  setUpGameDimensions();
-  displayStars(gameWin, game_over);
+  // Set up the window for the stars
+  setUpGameDimensions(&gameWin_displayStars); // Pass a pointer to the pointer
+
+  // Set up the window for the spaceship
+  displayStars(gameWin_displayStars, game_over);
 
   while (!game_over)
   {
-    // Clear the game window
-    wclear(gameWin);
+    // Clear the stars window
+    wclear(gameWin_displayStars);
+
     int ch = getch();
     if (ch == 'q') // Exit
     {
       game_over = true;
-      delwin(gameWin);
+      delwin(gameWin_displayStars);
       clear();
       refresh();
     }
   }
 
-  delwin(gameWin); // Delete the game window before exiting gameLoop()
-  clear();         // Clear the screen after exiting gameLoop()
-  refresh();       // Refresh the display using ncurses
+  delwin(gameWin_displayStars);
+  clear();
+  refresh();
 }
