@@ -1,7 +1,12 @@
 #include <ncurses.h>
-#include <fstream>
+#include <iostream>
+#include <vector>
+#include <chrono>
 #include <thread>
+#include <cstdlib>
+#include <ctime>
 #include "window_effects.h"
+#include "spaceship.h"
 
 void setUpGameDimensions(WINDOW **gameWin) // Change the parameter to a pointer to the pointer
 {
@@ -11,7 +16,7 @@ void setUpGameDimensions(WINDOW **gameWin) // Change the parameter to a pointer 
   curs_set(0); // Hide the cursor
 
   int height, width;
-  int margin = 2;
+  int margin = 4;
   getmaxyx(stdscr, height, width); // Get terminal dimensions
 
   width = height * 3;
@@ -29,37 +34,29 @@ void setUpGameDimensions(WINDOW **gameWin) // Change the parameter to a pointer 
   }
 
   *gameWin = newwin(height, width, startY, startX); // Dereference the pointer to set the window
-  wrefresh(*gameWin); // Dereference the pointer to refresh the window
+  wrefresh(*gameWin);                               // Dereference the pointer to refresh the window
 }
 
 void gameLoop()
 {
   bool game_over = false;
-  WINDOW *gameWin_displayStars = nullptr;
+  WINDOW *gameWin_stars = nullptr;
   WINDOW *gameWin_spaceship = nullptr;
 
-  // Set up the window for the stars
-  setUpGameDimensions(&gameWin_displayStars); // Pass a pointer to the pointer
+  // Set up the main game window
+  setUpGameDimensions(&gameWin_stars);     // Pass a pointer to the pointer
+  setUpGameDimensions(&gameWin_spaceship); // Pass a pointer to the pointer
 
-  // Set up the window for the spaceship
-  displayStars(gameWin_displayStars, game_over);
+  // Run the displayStars and displaySpaceship functions in separate threads
+  std::thread starsThread(displayStars, gameWin_stars, std::ref(game_over));
+  std::thread spaceshipThread(displaySpaceship, gameWin_spaceship, std::ref(game_over));
 
-  while (!game_over)
-  {
-    // Clear the stars window
-    wclear(gameWin_displayStars);
+  // Wait for both threads to finish
+  starsThread.join();
+  spaceshipThread.join();
 
-    int ch = getch();
-    if (ch == 'q') // Exit
-    {
-      game_over = true;
-      delwin(gameWin_displayStars);
-      clear();
-      refresh();
-    }
-  }
-
-  delwin(gameWin_displayStars);
-  clear();
-  refresh();
+  // Cleanup and exit
+  delwin(gameWin_stars);
+  delwin(gameWin_spaceship);
+  endwin(); // Close the ncurses environment
 }

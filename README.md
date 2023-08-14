@@ -1,4 +1,4 @@
 ## To compile the project
-g++ -o spaceship main.cpp menu.cpp high_scores.cpp game_loop.cpp window_effects.cpp -lncurses
+g++ -std=c++11 -o spaceship main.cpp menu.cpp high_scores.cpp game_loop.cpp window_effects.cpp spaceship.cpp -lncurses
 ## To run
 ./spaceship

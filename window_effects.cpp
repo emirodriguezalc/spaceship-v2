@@ -34,10 +34,9 @@ void displayStars(WINDOW *gameWin, bool &game_over)
     }
 
     // Refresh the window to display changes
-    box(gameWin, 0, 0);
     wrefresh(gameWin);
 
     // Sleep for a short time to control the movement speed
-    std::this_thread::sleep_for(std::chrono::milliseconds(50));
+    std::this_thread::sleep_for(std::chrono::milliseconds(40));
   }
 }
